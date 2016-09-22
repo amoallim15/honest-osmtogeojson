@@ -1,11 +1,7 @@
-#! /usr/bin/env/ python
+#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
-import argparse
+from .console import execute
 
 
-
-# __dirname = path.abspath(path.dirname(__file__))
-def main(args= sys.argv):
-    print 'well done darling', args
+__all__ = ['console', 'core']
