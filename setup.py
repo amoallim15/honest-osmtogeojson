@@ -5,7 +5,7 @@ from setuptools import setup
 from os import path
 
 
-# __dirname = path.abspath(path.dirname(__file__))
+
 setup(
     name= 'honest-osmtogeojson',
     version= '1.0.0',
@@ -17,8 +17,10 @@ setup(
     keywords= 'osm geojson converter honest',
     packages= ['hotgj'],
     entry_points= { 'console_scripts': ['honest-osmtogeojson = hotgj:main'] },
+    license= 'MIT',
     classifiers= [
         'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: MIT License'
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
