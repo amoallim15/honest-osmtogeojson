@@ -3,15 +3,13 @@
 
 from setuptools import setup
 
-
-
 def readme():
     with open('README.md') as f:
         return f.read()
 
 setup(
     name= 'honest-osmtogeojson',
-    version= '1.0.0',
+    version= '0.0.1',
     description= 'honest-osmtogeojson is a python module that converts OSM data represented in (XML format) into a GeoJSON data represented in (JSON), inspired by the JavaScript module osmtogeojson.',
     long_description= readme(),
     url= 'https://github.com/AXJ15/honest-osmtogeojson',
@@ -31,6 +29,6 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Software Development :: Libraries :: Python Modules'
     ]
 )
