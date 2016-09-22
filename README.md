@@ -1,7 +1,5 @@
 # honest-osmtogeojson
-honest-osmtogeojson is a python package that converts OSM data represented in (XML format) into a GeoJSON data represented in (JSON). 
-
-inspired by the JavaScript module [osmtogeojson](https://github.com/tyrasd/osmtogeojson).
+honest-osmtogeojson is a python package that converts OSM data represented in (XML format) into a GeoJSON data represented in (JSON), inspired by the JavaScript module [osmtogeojson](https://github.com/tyrasd/osmtogeojson).
 
 Top Features:
 
@@ -12,9 +10,9 @@ Top Features:
 
 Differences from the JavaScript module [osmtogeojson](https://github.com/tyrasd/osmtogeojson):
 
-* server-sided script only, this is a python package, it won't work on the browser :).
-* flat properties by convention, no need to generate nested properties grouped by "tags" or "meta", it's unnessary overhead.
-* a whole different algorithm to process the conversion of OSM data into GeoJSON anomalies, this package will try to avoid duplicated data as much as possible, I'll go through this further on the next sections.
+* server-sided usage only, this is a python package it won't work on browser :).
+* GeoJSON feature's flat properties by convention, it will be simply a list of key-value pairs instead of the unnecessary structured JSON object overhead.
+* a whole different algorithm to process the anomalies of converting OSM data into GeoJSON data, this package will try to avoid duplicated data as much as possible, I'll go through this further in the follow up sections.
 
 # Installation
 to install this package, simply execute the following terminal command:
