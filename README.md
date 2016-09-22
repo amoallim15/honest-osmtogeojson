@@ -1,4 +1,5 @@
 # honest-osmtogeojson
+
 honest-osmtogeojson is a python package that converts OSM data represented in (XML format) into a GeoJSON data represented in (JSON), inspired by the JavaScript module [osmtogeojson](https://github.com/tyrasd/osmtogeojson).
 
 Top Features:
@@ -14,9 +15,11 @@ Differences from the JavaScript module [osmtogeojson](https://github.com/tyrasd/
 * GeoJSON feature's flat properties by convention, it will be simply a list of key-value pairs instead of the unnecessary structured JSON object overhead.
 * a whole different algorithm to process the anomalies of converting OSM data into GeoJSON, this package will try to avoid duplicated data as much as possible, I'll go through this further in the follow up sections.
 
-Installation
-------------
+## Installation
 
 to install this package, simply execute the following terminal command:
 
 	$ pip install honest-osmtogeojson
+
+## Usage
+
