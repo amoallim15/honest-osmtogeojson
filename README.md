@@ -27,13 +27,13 @@ to install this package, simply execute the following terminal command:
 
 -- empty
 
-## Bugs
-
-Please report any bugs on the [issue tracker](https://github.com/AXJ15/honest-osmtogeojson/issues)
-
 ## GeoJSON
 
 -- empty
+
+## Bugs
+
+Please report any bugs on the [issue tracker](https://github.com/AXJ15/honest-osmtogeojson/issues)
 
 ## Contributors
 
