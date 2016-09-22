@@ -23,3 +23,20 @@ to install this package, simply execute the following terminal command:
 
 ## Usage
 
+-- empty
+
+## Bugs
+
+Please report any bugs on the [issue tracker](https://github.com/AXJ15/honest-osmtogeojson/issues)
+
+## GeoJSON
+
+-- empty
+
+## Contributors
+
+* [Ali Moallim](axj.159@gmail.com)
+
+## License
+
+MIT Licensed.
