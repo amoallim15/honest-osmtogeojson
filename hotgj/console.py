@@ -7,7 +7,7 @@ from helpers import *
 
 CURRENT_VERSION = '0.0.1'
 DESC = """
-This tool convert large (≳ 100 MB) OpenStreetMaps OSM data in XML format to GeoJSON in one go.
+This tool converts large (≳ 100 MB) OSM data represented in (XML format) into a GeoJSON data represented in (JSON) in one go.
    _  _  __  _  _  ___  ___  ____    __   ___  __  __  
   ( )( )/  \( \( )( __)/ __)(_  _)  /  \ / __)(  \/  ) 
   | __ ( () )  \ || _) \__ \  )(   ( () )\__ \ )    (  
