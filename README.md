@@ -1,6 +1,15 @@
 # Honest OSM to GeoJSON Converter
 
-honest-osmtogeojson is a python package that converts OSM data represented in (XML format) into a GeoJSON data represented in (JSON), inspired by the JavaScript module [osmtogeojson](https://github.com/tyrasd/osmtogeojson).
+honest-osmtogeojson is a python package that converts large OSM data (≳ 100 MB) represented in (XML format) into a GeoJSON data represented in (JSON), inspired by the JavaScript module [osmtogeojson](https://github.com/tyrasd/osmtogeojson).
+
+      _  _  __  _  _  ___  ___  ____    __   ___  __  __  
+     ( )( )/  \( \( )( __)/ __)(_  _)  /  \ / __)(  \/  ) 
+     | __ ( () )  \ || _) \__ \  )(   ( () )\__ \ )    (  
+     (_)(_)\__/(_)\_)(___)(___/ (__)   \__/ (___/(_/\/\_) 
+        ____  __     __  ___  __    __  ___   __  _  _    
+       (_  _)/  \   / _)( __)/  \  (  )/ __) /  \( \( )   
+         )( ( () ) ( (/\| _)( () )__)( \__ \( () )  \ |   
+        (__) \__/   \__/(___)\__/(___/ (___/ \__/(_)\_)   
 
 * Alpha.
 * real OSM [polygon detection](https://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features).
@@ -27,10 +36,10 @@ to install this package, simply execute the following terminal command:
 
 Well, I named this package honest because I'm going to tell you this, over engineering the solution is not good-practice though, playing around OSM data for a while I've found that there is two issues will rise when converting OSM data to GeoJSON that you must be aware of:
 
-* `<nd/>` tags within the `<way/>` tags **MUST** be in order.
-* `<member/>` tags within the `<relation/>` tags **MUST** be in order too.
+* `<nd/>` tags within the `<way/>` tags MUST be in order.
+* `<member/>` tags within the `<relation/>` tags MUST be in order too.
 
-and by **MUST**, I mean as it's in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt)
+and by MUST, I mean as it's in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt)
 
 #### Why is that?
 
