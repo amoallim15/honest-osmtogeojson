@@ -1,15 +1,16 @@
+
+		  _  _  __  _  _  ___  ___  ____    __   ___  __  __  
+		 ( )( )/  \( \( )( __)/ __)(_  _)  /  \ / __)(  \/  ) 
+		 | __ ( () )  \ || _) \__ \  )(   ( () )\__ \ )    (  
+		 (_)(_)\__/(_)\_)(___)(___/ (__)   \__/ (___/(_/\/\_) 
+		    ____  __     __  ___  __    __  ___   __  _  _    
+		   (_  _)/  \   / _)( __)/  \  (  )/ __) /  \( \( )   
+		     )( ( () ) ( (/\| _)( () )__)( \__ \( () )  \ |   
+		    (__) \__/   \__/(___)\__/(___/ (___/ \__/(_)\_)   
+
 # Honest OSM to GeoJSON Converter
 
 honest-osmtogeojson is a python package that converts large OSM data (≳ 100 MB) represented in (XML format) into a GeoJSON data represented in (JSON), inspired by the JavaScript module [osmtogeojson](https://github.com/tyrasd/osmtogeojson).
-
-      _  _  __  _  _  ___  ___  ____    __   ___  __  __  
-     ( )( )/  \( \( )( __)/ __)(_  _)  /  \ / __)(  \/  ) 
-     | __ ( () )  \ || _) \__ \  )(   ( () )\__ \ )    (  
-     (_)(_)\__/(_)\_)(___)(___/ (__)   \__/ (___/(_/\/\_) 
-        ____  __     __  ___  __    __  ___   __  _  _    
-       (_  _)/  \   / _)( __)/  \  (  )/ __) /  \( \( )   
-         )( ( () ) ( (/\| _)( () )__)( \__ \( () )  \ |   
-        (__) \__/   \__/(___)\__/(___/ (___/ \__/(_)\_)   
 
 * Alpha.
 * real OSM [polygon detection](https://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features).
