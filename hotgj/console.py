@@ -3,6 +3,7 @@
 
 import sys
 import argparse
+from helpers import *
 
 CURRENT_VERSION = '0.0.1'
 DESC = """
@@ -15,16 +16,6 @@ This tool convert large (≳ 100 MB) OpenStreetMaps OSM data in XML format to Ge
 """
 DEFAULT_IN_MEMORY_DECT_SIZE = '300'
 DEFAULT_IN_MEMORY_LIST_LENGTH = '10000000'
-
-def print_default_skipped_tags():
-    return 'nothing yet.'
-
-class ListAction(argparse.Action):
-    def __init__(self, option_strings, dest, help, nargs= None, **keyargs):
-        super(ListAction, self).__init__(option_strings, dest= dest, help= help, nargs= 0)
-    def __call__(self, parser, namespace, values= None, option_strings= None):
-        print print_default_skipped_tags()
-        parser.exit()
 
 parser = argparse.ArgumentParser(description= DESC, formatter_class= argparse.RawTextHelpFormatter)
 
@@ -47,8 +38,9 @@ parser.add_argument(
 parser.add_argument(
     '-t',
     '--tags',
-    action= ListAction,
-    help= 'show the default uninteresting tags to be skipped'
+    action= CustomAction,
+    help= 'show the default uninteresting tags to be skipped',
+    text= 'aaa aaa aaa'
 )
 parser.add_argument(
     '-s',
