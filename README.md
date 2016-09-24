@@ -32,10 +32,6 @@ to install this package, simply execute the following terminal command:
 
 -- empty
 
-## Why So Honest?
-
--- empty
-
 ## GeoJSON
 
 -- empty
