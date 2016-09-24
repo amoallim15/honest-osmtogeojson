@@ -20,3 +20,9 @@ _CLEAR = '\r\x1b[2K'
 def loading(i, num= 8, speed= 0.5, btxt= _PROCESSING, atxt= ''):
     i = (i % num) * speed
     return '\r' + btxt + '.' * i + ' ' * (num * speed - i - (1 if num % 2 == 0 else 0)) + atxt + ' '
+
+def parse_int(_str):
+    try:
+        return int(_str)
+    except ValueError:
+        return 0

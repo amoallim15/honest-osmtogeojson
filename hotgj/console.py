@@ -4,23 +4,23 @@
 import sys
 import argparse
 from helpers import *
+from core import *
+import pkg_resources
 
-CURRENT_VERSION = '0.0.1'
-DESC = """
-This tool converts large (≳ 100 MB) OSM data represented in (XML format) into a GeoJSON data represented in (JSON) in one go.
-   _  _  __  _  _  ___  ___  ____    __   ___  __  __  
-  ( )( )/  \( \( )( __)/ __)(_  _)  /  \ / __)(  \/  ) 
-  | __ ( () )  \ || _) \__ \  )(   ( () )\__ \ )    (  
-  (_)(_)\__/(_)\_)(___)(___/ (__)   \__/ (___/(_/\/\_) 
-     ____  __     __  ___  __    __  ___   __  _  _    
-    (_  _)/  \   / _)( __)/  \  (  )/ __) /  \( \( )   
-      )( ( () ) ( (/\| _)( () )__)( \__ \( () )  \ |   
-     (__) \__/   \__/(___)\__/(___/ (___/ \__/(_)\_)   
+_CURRENT_VERSION = '0.0.1'
+_DESC = """
+This is a python package that converts large (≳ 100 MB) OSM data represented in (XML format) into a GeoJSON data represented in (JSON) in one go.
+      _  _  __  _  _  ___  ___  ____    __   ___  __  __  
+     ( )( )/  \( \( )( __)/ __)(_  _)  /  \ / __)(  \/  ) 
+     | __ ( () )  \ || _) \__ \  )(   ( () )\__ \ )    (  
+     (_)(_)\__/(_)\_)(___)(___/ (__)   \__/ (___/(_/\/\_) 
+        ____  __     __  ___  __    __  ___   __  _  _    
+       (_  _)/  \   / _)( __)/  \  (  )/ __) /  \( \( )   
+         )( ( () ) ( (/\| _)( () )__)( \__ \( () )  \ |   
+        (__) \__/   \__/(___)\__/(___/ (___/ \__/(_)\_)   
 """
-DEFAULT_IN_MEMORY_DECT_SIZE = '300'
-DEFAULT_IN_MEMORY_LIST_LENGTH = '10000000'
 
-parser = argparse.ArgumentParser(description= DESC, formatter_class= argparse.RawTextHelpFormatter)
+parser = argparse.ArgumentParser(description= _DESC, formatter_class= argparse.RawTextHelpFormatter)
 
 parser.add_argument(
     'convert',
@@ -30,13 +30,13 @@ parser.add_argument(
     '-d',
     '--destination',
     nargs= '?',
-    help= 'save GeoJSON data to this file'
+    help= 'process and save the GeoJSON data to this directory'
 )
 parser.add_argument(
     '-v',
     '--version',
     action= 'version',
-    version= CURRENT_VERSION
+    version= _CURRENT_VERSION
 )
 parser.add_argument(
     '-t',
@@ -71,3 +71,6 @@ def execute(args= sys.argv):
     args = parser.parse_args(args[1:])
     print args
     print 'well done, now we rolling..'
+    print __name__
+    # print pkg_resources.resource_string('data', 'data.txt')
+    print reset_db_file(args.convert)
