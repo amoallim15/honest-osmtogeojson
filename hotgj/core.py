@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 from os import path, remove
 from sys import getsizeof
 from contextlib import closing as CL
+from helpers import *
 
 DEFAULT_IN_MEMORY_DECT_SIZE = '300'
 DEFAULT_IN_MEMORY_LIST_LENGTH = '10000000'
@@ -47,21 +48,14 @@ class OSMIndexingException(Exception):
 class OSMConvertingException(Exception):
     pass
 
-def get_directory(directory):
-    _path = os.path.abspath(directory)
-    if not os.path.isdir(_path):
-        raise OSMIndexingException('No such directory exists: ' + _path)
-    else:
-        return _path
-
-def reset_db_file(directory):
-    _path = get_directory(directory)
-    _file = _path + '/' + DEFAULT_DB_FILE
+def reset_db_file(_directory):
+    _path = get_file_path(_directory + '/' + DEFAULT_DB_FILE)
     try:
-        if os.path.isfile(_file):
-            remove(_file)
+        if _path is not None:
+            print _path
+            remove(_path)
     except OSError as e:
-        raise OSMIndexingException(e)
+        raise ConsoleArgumentException(e)
     return
 
 def format_in_db_dict_id(elm):
@@ -165,7 +159,7 @@ def index_osm_file(osm_path, in_memory_dict_size, in_memory_list_length):
             # validate_element(element, parent)
             index_element(_element= element, _parent= parent, _dict= in_memory_dict, _list = in_memory_list)
         except OSMIndexingException as e:
-            print e
+            print _ERROR, e
 
     store_to_db(_dict= in_memory_dict)
     for key in in_memory_list:
@@ -174,7 +168,7 @@ def index_osm_file(osm_path, in_memory_dict_size, in_memory_list_length):
     return
 
 def convert_osm_file(db_path, skip_tags):
-    
+
     return
 
 

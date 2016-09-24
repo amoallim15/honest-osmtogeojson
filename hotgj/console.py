@@ -7,6 +7,9 @@ from helpers import *
 from core import *
 import pkg_resources
 
+class ConsoleArgumentException(Exception):
+    pass
+
 _CURRENT_VERSION = '0.0.1'
 _DESC = """
 This is a python package that converts large (≳ 100 MB) OSM data represented in (XML format) into a GeoJSON data represented in (JSON) in one go.
@@ -64,13 +67,65 @@ parser.add_argument(
     '--memory-list',
     nargs= '?',
     default= DEFAULT_IN_MEMORY_LIST_LENGTH,
-    help= 'in memory lists length sweet spot to process the OSM data, default '+ DEFAULT_IN_MEMORY_LIST_LENGTH +' elements'
+    help= 'in memory lists length sweet spot to process the OSM data, default '+ DEFAULT_IN_MEMORY_LIST_LENGTH +' values'
 )
 
+def skip_value_handler(value):
+    if value == True:
+        temp = DEFAULT_SKIP_TAGS
+    elif value == None:
+        temp = []
+    else:
+        temp = parse_csv(input= value)
+    return ', '.join(temp) or None
+
+def memory_dect_value_handler(value):
+    temp = parse_int(value)
+    if temp >= 100:
+        return temp
+    else:
+        raise ConsoleArgumentException('in memory allocation value is too low: ' + temp + ' MB')
+
+def memory_list_value_handler(value):
+    temp = parse_int(value)
+    if temp >= 100000:
+        return temp
+    else:
+        raise ConsoleArgumentException('in memory lists length is too low: ' + temp + ' values')
+
+def destination_value_handler(value):
+    _path = get_directory_path(value)
+    if _path is not None:
+        return _path
+    else:
+        raise ConsoleArgumentException('No such directory exists: ' + str(value))
+
+def convert_value_handler(value):
+    _path = get_file_path(value)
+    if _path is not None:
+        return _path
+    else:
+        raise ConsoleArgumentException('no such file exists: ' + str(value))
+
 def execute(args= sys.argv):
-    args = parser.parse_args(args[1:])
-    print args
-    print 'well done, now we rolling..'
-    print __name__
-    # print pkg_resources.resource_string('data', 'data.txt')
-    print reset_db_file(args.convert)
+    args = vars(parser.parse_args(args[1:]))
+
+    try:
+        args['convert'] = convert_value_handler(value= args['convert'])
+        args['skip'] = skip_value_handler(value= args['skip'])
+        args['memory_dect'] = memory_dect_value_handler(value= args['memory_dect'])
+        args['memory_list'] = memory_list_value_handler(value= args['memory_list'])
+        args['destination'] = destination_value_handler(value= args['destination'])
+
+        print args
+        reset_db_file(args['destination'])
+        # index_osm_file(osm_path= args['convert'], in_memory_dict_size= args['memor-dect'], in_memory_list_length= args['memory-list'])
+    except ConsoleArgumentException as e:
+        print ERROR, e
+
+    
+
+
+
+
+

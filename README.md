@@ -34,20 +34,7 @@ to install this package, simply execute the following terminal command:
 
 ## Why So Honest?
 
-Well, I named this package honest because I'm going to tell you this, over engineering the solution is not good-practice though, playing around OSM data for a while I've found that there is two issues will rise when converting OSM data to GeoJSON that you must be aware of:
-
-* `<nd/>` tags within the `<way/>` tags MUST be in order.
-* `<member/>` tags within the `<relation/>` tags MUST be in order too.
-
-and by MUST, I mean as it's in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt)
-
-#### Why is that?
-
-There's no algorithm or a way to fix this but to visually sort it node by node, or way by way which is impossible if you have a huge amount of tainted `<way/>` or `<relation/>` data.
-OSM doesn't enforce this by default for the `<relation/>` tags for producing the best rendered result, e.g. as it says for the OSM polygon relations:
-
-> 
-* The order of the relation members does not matter (but properly sorted member lists can help human editors to verify completeness).
+-- empty
 
 ## GeoJSON
 
