@@ -3,6 +3,7 @@
 
 import argparse
 import re
+import sys
 from os import path
 
 class CustomAction(argparse.Action):
@@ -19,9 +20,11 @@ PROCESSING = '\033[43m\033[97m PROCESSING \033[0m'
 INFO = '\033[44m\033[97m INFO \033[0m'
 CLEAR = '\r\x1b[2K'
 
-def loading(i, num= 8, speed= 0.5, btxt= PROCESSING, atxt= ''):
-    i = (i % num) * speed
-    return '\r' + btxt + '.' * i + ' ' * (num * speed - i - (1 if num % 2 == 0 else 0)) + atxt + ' '
+def loading(i, x= 8, y= 2, btxt= PROCESSING, atxt= ''):
+    j = (i % x) / y
+    sys.stdout.write(CLEAR + btxt + '.' * j + ' ' * (x / y - j - (1 if x % 2 == 0 else 0)) + atxt + ' ')
+    sys.stdout.flush()
+    return (i + 1) % x
 
 def parse_int(_str):
     try:

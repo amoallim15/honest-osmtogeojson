@@ -4,6 +4,7 @@
 import os
 import gc
 import shelve
+import sys
 import xml.etree.ElementTree as ET
 from os import path, remove
 from sys import getsizeof
@@ -48,14 +49,19 @@ class OSMIndexingException(Exception):
 class OSMConvertingException(Exception):
     pass
 
+class DBAccessException(Exception):
+    pass
+
+def get_db_file(_directory):
+    return path.abspath(_directory + '/' + DEFAULT_DB_FILE)
+
 def reset_db_file(_directory):
     _path = get_file_path(_directory + '/' + DEFAULT_DB_FILE)
     try:
         if _path is not None:
-            print _path
             remove(_path)
     except OSError as e:
-        raise ConsoleArgumentException(e)
+        raise DBAccessException(e)
     return
 
 def format_in_db_dict_id(elm):
@@ -81,7 +87,7 @@ def deduplicator(objA, objB):
     verB = parse_int(objB['attrib']['version'])
     return objA if verA >= verB else objB
 
-def validate_element():
+def validate_element(_element, _parent):
     return
 
 def index_element(_element, _parent, _dict, _list):
@@ -118,57 +124,67 @@ def index_element(_element, _parent, _dict, _list):
         _dict[_parent_id]['members'].append(dict(_element.attrib))
     return
 
-def store_to_db(_dict):
-    with CL(shelve.open(DEFAULT_DB_PATH, 'c')) as db:
-        for key in _dict:
-            if key in db:
-                temp = deduplicator(db[key], _dict[key])
-                db[key] = temp
-            else:
-                db[key] = _dict[key]
+def store_dect_to_db(_directory, _dict):
+    try:
+        with CL(shelve.open(get_db_file(_directory), 'c')) as db:
+            for key in _dict:
+                if key in db:
+                    temp = deduplicator(db[key], _dict[key])
+                    db[key] = temp
+                else:
+                    db[key] = _dict[key]
+    except IOError as e:
+        raise DBAccessException('db access error: ' + DEFAULT_DB_FILE + ', details: ' + e)
     return
 
-def store_list_to_db(_key, _list, _last):
-    with CL(shelve.open(DEFAULT_DB_PATH, 'c')) as db:
-        db[_key] = _list
-        db['elements-count'] = _last
+def store_list_to_db(_directory, _key, _list, _last):
+    try:
+        with CL(shelve.open(get_db_file(_directory), 'c')) as db:
+            db[_key] = _list
+            db['elements-count'] = _last
+    except IOError as e:
+        raise DBAccessException('db access error: ' + DEFAULT_DB_FILE + ', details: ' + e)
     return
 
-def index_osm_file(osm_path, in_memory_dict_size, in_memory_list_length):
+def index_osm_file(osm_path, destination, in_memory_dict_size, in_memory_list_length):
     osm = stream_osm_file(osm_path)
     in_memory_allowed_size = in_memory_dict_size * 1024 * 1024
-    in_memory_allowed_list_length = in_memory_list_length
+    in_memory_allowed_list_length = 1000 #in_memory_list_length
     in_memory_dict = {}
     in_memory_list = {'nodes': [], 'ways': [], 'relations': []}
     in_memory_list_pos = { 'nodes': 0, 'ways': 0, 'relations': 0 }
+    step = 0
 
     for element, parent in osm:
         if element.tag in OSM_MAIN_TAGS:
             for key in in_memory_list:
                 if len(in_memory_list[key]) > in_memory_allowed_list_length:
                     _list_id = format_in_db_list_id(key, in_memory_list_pos[key])
-                    store_list_to_db(_key= _list_id, _list= in_memory_list[key], _last= in_memory_list_pos)
+                    store_list_to_db(_directory= destination, _key= _list_id, _list= in_memory_list[key], _last= in_memory_list_pos)
                     in_memory_list[key] = []
                     in_memory_list_pos[key] += 1
                     gc.collect()
             if getsizeof(in_memory_dict) > in_memory_allowed_size:
-                store_to_db(_dict= _dict)
+                store_dect_to_db(_directory= destination, _dict= _dict)
                 in_memory_dict = {}
                 gc.collect()
         try:
             # validate_element(element, parent)
             index_element(_element= element, _parent= parent, _dict= in_memory_dict, _list = in_memory_list)
+            step = loading(i= step, x= 60, y= 15)
         except OSMIndexingException as e:
-            print _ERROR, e
+            print CLEAR + ERROR, e
 
-    store_to_db(_dict= in_memory_dict)
+    print CLEAR
+    print CLEAR + PROCESSING, 'finalising indexing, please wait..'
+
+    store_dect_to_db(_directory= destination, _dict= in_memory_dict)
     for key in in_memory_list:
         _list_id = format_in_db_list_id(key, in_memory_list_pos[key])
-        store_list_to_db(_key= _list_id, _list= in_memory_list[key], _last= in_memory_list_pos)
+        store_list_to_db(_directory= destination, _key= _list_id, _list= in_memory_list[key], _last= in_memory_list_pos)
     return
 
 def convert_osm_file(db_path, skip_tags):
-
     return
 
 

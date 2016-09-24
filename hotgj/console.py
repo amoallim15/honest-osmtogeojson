@@ -107,6 +107,31 @@ def convert_value_handler(value):
     else:
         raise ConsoleArgumentException('no such file exists: ' + str(value))
 
+def print_args(args):
+    print ''
+    print INFO,'Converting Arguments:'
+    print '------------------------------'
+    print '  convert:         ', args['convert']
+    print '  destination:     ', args['destination']
+    print '  skip values:     ', args['skip']
+    print '  memory dect:     ', args['memory_dect'], 'MB'
+    print '  memory list:     ', args['memory_list'], 'values'
+    print ''
+
+def print_indexing_result(_directory, in_memory_list):
+    try: 
+        with CL(shelve.open(get_db_file(_directory), 'c')) as db:
+            osm = db['osm'] if 'osm' in db else None
+            bounds = db['bounds'] if 'bounds' in db else None
+            print ''
+            print INFO,'Indexing Result:'
+            print '------------------------------'
+            print '  Info:            ', osm
+            print '  Bounds:          ', bounds
+            print ''
+    except IOError as e:
+        raise DBAccessException('db access error: ' + DEFAULT_DB_FILE + ', details: ' + e)
+
 def execute(args= sys.argv):
     args = vars(parser.parse_args(args[1:]))
 
@@ -117,11 +142,16 @@ def execute(args= sys.argv):
         args['memory_list'] = memory_list_value_handler(value= args['memory_list'])
         args['destination'] = destination_value_handler(value= args['destination'])
 
-        print args
+        print_args(args)
+
         reset_db_file(args['destination'])
-        # index_osm_file(osm_path= args['convert'], in_memory_dict_size= args['memor-dect'], in_memory_list_length= args['memory-list'])
-    except ConsoleArgumentException as e:
-        print ERROR, e
+
+        index_osm_file(osm_path= args['convert'], destination= args['destination'], in_memory_dict_size= args['memory_dect'], in_memory_list_length= args['memory_list'])
+
+        print_indexing_result(args['destination'], args['memory_list'])
+
+    except (ConsoleArgumentException, DBAccessException) as e:
+        print CLEAR + ERROR, e
 
     
 
