@@ -49,7 +49,7 @@ def destination_value_handler(value):
     _path = get_directory_path(value)
     if _path is not None:
         return _path
-    raise ConsoleArgumentException('No such directory exists: '+ str(value))
+    raise ConsoleArgumentException('No such directory exists as a destination: '+ str(value))
 
 def convert_value_handler(value):
     _path = get_file_path(value)
@@ -62,8 +62,8 @@ def print_args(args):
     print('------------------------------')
     print('  convert:         ', args['convert'])
     print('  destination:     ', args['destination'])
-    print('  skip values:     ', args['skip'])
-    print('  memory:          ', args['memory_dect'], 'MB', NEWLINE)
+    print('  memory:          ', args['memory'], 'MB')
+    print('  skip values:     ', (NEWLINE +'                   ').join(args['skip'].split(',')), NEWLINE)
 
 def print_indexing_result(_directory):
     def func(db):
@@ -81,7 +81,7 @@ def execute(args= sys.argv):
     try:
         args['convert'] = convert_value_handler(value= args['convert'])
         args['skip'] = skip_value_handler(value= args['skip'])
-        args['memory_dect'] = memory_dect_value_handler(value= args['memory'])
+        args['memory'] = memory_dect_value_handler(value= args['memory'])
         args['destination'] = destination_value_handler(value= args['destination'])
 
         print_args(args)
@@ -90,7 +90,7 @@ def execute(args= sys.argv):
         print_indexing_result(args['destination'])
 
     except (ConsoleArgumentException, DBAccessException) as e:
-        print(ERROR, e)
+        print(ERROR, e, NEWLINE)
 
     
 

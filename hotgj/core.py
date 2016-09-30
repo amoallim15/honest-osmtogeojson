@@ -110,20 +110,28 @@ def is_same_version(objA, prt):
     verB = parse_int(prt.attrib['version'])
     return True if verA == verB else False
 
-def OSM_handler(elm, prt, _dict):
+def OSM_handler(elm, prt, _dict, _list):
     if elm.tag == OSM and prt == None:
         _dict['osm'] = { 'attrib': dict(elm.attrib) }
         return True
 
-def BOUNDS_handler(elm, prt, _dict):
+def BOUNDS_handler(elm, prt, _dict, _list):
     if prt == None: return
     if elm.tag == BOUNDS and prt.tag == OSM:
+        for i in ['maxlon', 'minlon', 'maxlat', 'minlat']:
+            if i not in elm.attrib:
+                raise OSMIndexingException('element is missing important attributes: '+ str(elm))
         _dict['bounds'] = { 'attrib': dict(elm.attrib) }
         return True
 
-def OSM_MAIN_TAGS_handler(elm, prt, _dict):
+def OSM_MAIN_TAGS_handler(elm, prt, _dict, _list):
     if prt == None: return
     if elm.tag in OSM_MAIN_TAGS and prt.tag == OSM:
+        buk = []
+        if elm.tag == NODE: buk = list(i for i in ['id', 'version', 'lon', 'lat'] if i not in elm.attrib)
+        elif elm.tag in [WAY, RELATION]: buk = list(i for i in ['id', 'version'] if i not in elm.attrib)
+        if len(buk) != 0:
+            raise OSMIndexingException('element is missing important attributes: '+ str(elm))
         elm_id = format_in_db_dict_id(elm)
         if elm_id in _dict:
             _dict[elm_id] = deduplicator(_dict[elm_id], { 'attrib': dict(elm.attrib) })
@@ -132,9 +140,12 @@ def OSM_MAIN_TAGS_handler(elm, prt, _dict):
             _dict[elm_id] = { 'attrib': dict(elm.attrib) }
         return True
 
-def TAG_handler(elm, prt, _dict):
+def TAG_handler(elm, prt, _dict, _list):
     if prt == None: return
     if elm.tag == TAG and prt.tag in OSM_MAIN_TAGS:
+        for i in ['k', 'v']:
+            if i not in elm.attrib:
+                raise OSMIndexingException('element is missing important attributes: '+ str(elm))
         prt_id = format_in_db_dict_id(prt)
         if is_same_version(_dict[prt_id], prt):
             if 'properties' not in _dict[prt_id]:
@@ -142,25 +153,30 @@ def TAG_handler(elm, prt, _dict):
             _dict[prt_id]['properties'][elm.attrib['k']] = elm.attrib['v']
         return True
 
-def ND_handler(elm, prt, _dict):
+def ND_handler(elm, prt, _dict, _list):
     if prt == None: return
     if elm.tag == ND and prt.tag == WAY:
+        if 'ref' not in elm.attrib:
+            raise OSMIndexingException('element is missing important attributes: '+ str(elm))
         prt_id = format_in_db_dict_id(prt)
         if 'nodes' not in _dict[prt_id]:
             _dict[prt_id]['nodes'] = []
         _dict[prt_id]['nodes'].append(elm.attrib['ref'])
         return True
 
-def MEMBER_handler(elm, prt, _dict):
+def MEMBER_handler(elm, prt, _dict, _list):
     if prt == None: return
     if elm.tag == MEMBER and prt.tag == RELATION:
+        for i in ['role', 'type', 'id']:
+            if i not in elm.attrib:
+                raise OSMIndexingException('element is missing important attributes: '+ str(elm))
         prt_id = format_in_db_dict_id(prt)
         if 'members' not in _dict[prt_id]:
             _dict[prt_id]['members'] = []
         _dict[prt_id]['members'].append(dict(elm.attrib))
         return True
 
-def get_element_handlers():
+def get_default_element_handlers():
     return [OSM_handler, BOUNDS_handler, OSM_MAIN_TAGS_handler, TAG_handler, ND_handler, MEMBER_handler]
 
 def index_osm_file(osm_path, destination, in_memory_dict_size):
@@ -179,11 +195,10 @@ def index_osm_file(osm_path, destination, in_memory_dict_size):
                 in_memory_dict = {}
                 gc.collect()
         try:
-            element_handlers = get_element_handlers()
             consumed = None
-            for fn in element_handlers:
+            for fn in get_default_element_handlers():
                 if callable(fn):
-                    consumed = fn(element, parent, in_memory_dict)
+                    consumed = fn(element, parent, in_memory_dict, in_memory_list)
                     if consumed == True: break
             if consumed == None:
                 raise OSMIndexingException('unidentified element, element ignored: '+ str(element))
