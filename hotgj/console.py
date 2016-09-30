@@ -67,16 +67,14 @@ def print_args(args):
     print('  memory list:     ', args['memory_list'], 'values', NEWLINE)
 
 def print_indexing_result(_directory):
-    try: 
-        with CL(shelve.open(get_db_file(_directory), 'c')) as db:
-            osm = db['osm'] if 'osm' in db else None
-            bounds = db['bounds'] if 'bounds' in db else None
-            print(INFO, 'Indexing Result:')
-            print('------------------------------')
-            print('  Info:            ', osm)
-            print('  Bounds:          ', bounds, NEWLINE)
-    except IOError as e:
-        raise DBAccessException('db access error: '+ DEFAULT_DB_FILE +', details: ' + e)
+    def func(db):
+        osm = db['osm'] if 'osm' in db else None
+        bounds = db['bounds'] if 'bounds' in db else None
+        print(INFO, 'Indexing Result:')
+        print('------------------------------')
+        print('  Info:            ', osm)
+        print('  Bounds:          ', bounds, NEWLINE)
+    update_db_file(_directory, func)
 
 def execute(args= sys.argv):
     args = vars(parser.parse_args(args[1:]))
