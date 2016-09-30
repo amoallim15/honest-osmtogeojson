@@ -28,6 +28,10 @@ to install this package, simply execute the following terminal command:
 
 	$ pip install honest-osmtogeojson
 
+or if you are using python3
+
+	$ pip3 install honest-osmtogeojson
+
 ## Usage
 
 -- empty
