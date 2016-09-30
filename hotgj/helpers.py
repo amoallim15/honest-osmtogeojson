@@ -14,11 +14,12 @@ class CustomAction(argparse.Action):
         print self.text
         parser.exit()
 
-ERROR = '\033[41m\033[97m ERROR \033[0m'
-DONE = '\033[42m\033[97m DONE \033[0m'
-PROCESSING = '\033[43m\033[97m PROCESSING \033[0m'
-INFO = '\033[44m\033[97m INFO \033[0m'
+NEWLINE = '\n'
 CLEAR = '\r\x1b[2K'
+ERROR = CLEAR + '\033[41m\033[97m ERROR \033[0m'
+DONE = CLEAR + NEWLINE + '\033[42m\033[97m DONE \033[0m'
+PROCESSING = CLEAR + NEWLINE + '\033[43m\033[97m PROCESSING \033[0m'
+INFO = CLEAR + NEWLINE + '\033[44m\033[97m INFO \033[0m'
 
 def loading(i, x= 8, y= 2, btxt= PROCESSING, atxt= ''):
     j = (i % x) / y
@@ -64,4 +65,3 @@ def get_file_path(_file= ''):
         return _path
     else:
         return None
-
