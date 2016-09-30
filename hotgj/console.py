@@ -3,8 +3,8 @@
 
 import sys
 import argparse
-from helpers import *
-from core import *
+from hotgj.helpers import *
+from hotgj.core import *
 import pkg_resources
 
 class ConsoleArgumentException(Exception): pass
@@ -63,8 +63,7 @@ def print_args(args):
     print('  convert:         ', args['convert'])
     print('  destination:     ', args['destination'])
     print('  skip values:     ', args['skip'])
-    print('  memory dect:     ', args['memory_dect'], 'MB')
-    print('  memory list:     ', args['memory_list'], 'values', NEWLINE)
+    print('  memory:          ', args['memory_dect'], 'MB', NEWLINE)
 
 def print_indexing_result(_directory):
     def func(db):
@@ -82,13 +81,12 @@ def execute(args= sys.argv):
     try:
         args['convert'] = convert_value_handler(value= args['convert'])
         args['skip'] = skip_value_handler(value= args['skip'])
-        args['memory_dect'] = memory_dect_value_handler(value= args['memory_dect'])
-        args['memory_list'] = memory_list_value_handler(value= args['memory_list'])
+        args['memory_dect'] = memory_dect_value_handler(value= args['memory'])
         args['destination'] = destination_value_handler(value= args['destination'])
 
         print_args(args)
         reset_db_file(args['destination'])
-        index_osm_file(osm_path= args['convert'], destination= args['destination'], in_memory_dict_size= args['memory_dect'])
+        index_osm_file(osm_path= args['convert'], destination= args['destination'], in_memory_dict_size= args['memory'])
         print_indexing_result(args['destination'])
 
     except (ConsoleArgumentException, DBAccessException) as e:
