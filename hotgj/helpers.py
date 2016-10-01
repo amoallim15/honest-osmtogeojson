@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import argparse
-import re
-import sys
+import argparse, re, sys, time
 from os import path
 
 class CustomAction(argparse.Action):
@@ -11,7 +9,8 @@ class CustomAction(argparse.Action):
         self.text = keyargs['text']
         super(CustomAction, self).__init__(option_strings, dest= dest, help= help, nargs= 0)
     def __call__(self, parser, namespace, values= None, option_strings= None):
-        print(self.text)
+        if callable(self.text): self.text()
+        else: print(str(self.text))
         parser.exit()
 
 NEWLINE = '\n'
@@ -21,11 +20,20 @@ DONE = CLEAR + NEWLINE + '\033[42m\033[97m DONE \033[0m'
 PROCESSING = CLEAR + '\033[43m\033[97m PROCESSING \033[0m'
 INFO = CLEAR + NEWLINE + '\033[44m\033[97m INFO \033[0m'
 
-def loading(i, x= 8, y= 2, btxt= PROCESSING, atxt= ''):
-    j = (i % x) / y
-    sys.stdout.write(CLEAR + btxt + '.' * j + ' ' * (x / y - j - (1 if x % 2 == 0 else 0)) + atxt + ' ')
+def loading(bag, points= 4, interval= 0.5, btxt= PROCESSING, atxt= ''):
+    bag['step'] = bag['step'] if 'step' in bag else 0
+    bag['time'] = bag['time'] if 'time' in bag else time.time()
+    now = time.time()
+    if now - bag['time'] > interval:
+        bag['time'] = now
+        bag['step'] = (bag['step'] + 1) % points
+    sys.stdout.write(CLEAR + btxt + '.' * bag['step'] + ' ' * (points - bag['step']) + atxt)
     sys.stdout.flush()
-    return (i + 1) % x
+    return bag
+
+def writeout(txt):
+    sys.stdout.write(CLEAR + txt)
+    sys.stdout.flush()
 
 def parse_int(_str):
     try:
