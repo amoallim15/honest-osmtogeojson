@@ -197,9 +197,6 @@ def index_osm_file(osm_path, destination, in_memory_dict_size):
         except OSMIndexingException as e:
             print(ERROR, e)
 
-    print(CLEAR)
-    print(PROCESSING, 'finalising indexing, please wait..')
-
     store_list_to_db(_directory= destination, _list= in_memory_list, _pos= in_memory_list_pos, bag= {})
     store_dect_to_db(_directory= destination, _dict= in_memory_dict, bag= {})
     return

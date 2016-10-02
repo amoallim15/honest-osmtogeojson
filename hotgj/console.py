@@ -93,7 +93,7 @@ def execute(args= sys.argv):
         indexing_time_start = time.time()
         index_osm_file(osm_path= args['convert'], destination= args['destination'], in_memory_dict_size= args['memory'])
         indexing_time_end = time.time()
-        print_indexing_result(args['destination'], indexing_time_start - indexing_time_end)
+        print_indexing_result(args['destination'], indexing_time_end - indexing_time_start)
 
     except (ConsoleArgumentException, DBAccessException) as e:
         print(ERROR, e, NEWLINE)
