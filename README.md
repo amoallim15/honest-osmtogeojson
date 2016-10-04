@@ -11,7 +11,7 @@ honest-osmtogeojson is a python package that converts large (≳ 100 MB) OSM dat
          )( ( () ) ( (/\| _)( () )__)( \__ \( () )  \ |   
         (__) \__/   \__/(___)\__/(___/ (___/ \__/(_)\_)   
 
-* Alpha.
+* **UNDER-DEVELEOPMENT**.
 * real OSM [polygon detection](https://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features).
 * can convert the entire OSM data in one go << this's the actual reason behind building this package :).
 * works with extra large data 100 MB, 1 GB, 10GB, or 50GB, without exhausting the machine resources.
